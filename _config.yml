@@ -16,7 +16,7 @@ resume:                 true
 resume-external:        false
 resume-url:             assets/cv.pdf
 
-url:                    http://igortarasenko.me/
+url:                    http://igortarasenko.me
 # your url:             http://USERNAME.github.io
 
 permalink:              /:title/
@@ -39,7 +39,7 @@ twitter:                sa1k0s
 # google:               mygoogle
 # instagram:            myinstagram
 # pinterest:            mypinterest
-linkedin:               in/igor-tarasenko-4647214b
+linkedin:               igor-tarasenko-4647214b
 # youtube:              myyoutube
 # spotify:              myspotify
 github:                 Saik0s
@@ -54,7 +54,7 @@ email:                  tarasenko.igor.v@gmail.com
 
 authors:
     johndoe:
-        name:           Igoe Tarasenko
+        name:           Igor Tarasenko
         bio:            A passionate lover of finding solutions for any development problem
         external-image: false
         picture:        assets/images/profile.jpg
@@ -73,7 +73,7 @@ width:                  normal
 # projects:             true
 
 # if you don't need "about" or "blog", comment them out below
-about:                  true
+# about:                true
 # blog:                 true
 
 # do you want to show the "read time" of the posts?
