@@ -1,6 +1,6 @@
 # main text of home
 name:                   Igor Tarasenko
-bio:                    A passionate lover of finding solutions for any development problem
+bio:                    A passionate problem solver and mobile solution developer
 
 # twitter summary info
 description:            A blog about mobile application development
@@ -55,7 +55,7 @@ email:                  tarasenko.igor.v@gmail.com
 authors:
     johndoe:
         name:           Igor Tarasenko
-        bio:            A passionate lover of finding solutions for any development problem
+        bio:            A passionate problem solver and mobile solution developer
         external-image: false
         picture:        assets/images/profile.jpg
         twitter:        sa1k0s
