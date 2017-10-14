@@ -12,7 +12,7 @@ picture:                assets/images/profile.jpg
 
 # If you want to include your resume, set to true
 # and specify source (external or local).
-resume:                 true
+resume:                 false
 resume-external:        false
 resume-url:             assets/cv.pdf
 
@@ -95,10 +95,10 @@ show-author:            true
 animation:              true
 
 plugins:
-  - jekyll-seo-tag
-  - jekyll-gist
-  - jekyll-feed
-  - jemoji
+#  - jekyll-seo-tag
+#  - jekyll-gist
+#  - jekyll-feed
+#  - jemoji
 
 jekyll-mentions:
     base_url:           https://github.com
