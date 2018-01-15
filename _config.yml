@@ -36,7 +36,7 @@ disqus:
 # if you don't have any of social below, comment the line
 facebook:               sa1k0s
 twitter:                sa1k0s
-# google:                 113802974157762791930
+# google:               113802974157762791930
 # instagram:            myinstagram
 # pinterest:            mypinterest
 linkedin:               igor-tarasenko-4647214b
@@ -66,8 +66,8 @@ authors:
 width:                  normal
 
 # if you don't need pagination, comment the *paginate* configs below
-# paginate:             5
-# paginate_path:        "blog/:num/"
+paginate:               5
+paginate_path:          "blog/:num/"
 
 # if you don't need projects, comment the *projects* configs below
 # projects:             true
@@ -97,7 +97,7 @@ animation:              true
 plugins:
 #  - jekyll-seo-tag
   - jekyll-gist
-#  - jekyll-feed
+  - jekyll-feed
   - jemoji
 
 jekyll-mentions:
