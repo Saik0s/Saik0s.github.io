@@ -34,9 +34,9 @@ disqus:
   categories:           [blog, project] # only show disqus for posts that have these categories
 
 # if you don't have any of social below, comment the line
-# facebook:             myfacebook
+facebook:               sa1k0s
 twitter:                sa1k0s
-# google:               mygoogle
+google:                 113802974157762791930
 # instagram:            myinstagram
 # pinterest:            mypinterest
 linkedin:               igor-tarasenko-4647214b
@@ -53,7 +53,7 @@ medium:                 saik0s
 email:                  tarasenko.igor.v@gmail.com
 
 authors:
-    johndoe:
+    saik0s:
         name:           Igor Tarasenko
         bio:            A passionate problem solver and mobile solution developer
         external-image: false
@@ -74,13 +74,13 @@ width:                  normal
 
 # if you don't need "about" or "blog", comment them out below
 # about:                true
-# blog:                 true
+blog:                   true
 
 # do you want to show the "read time" of the posts?
 read-time:              true
 
 # do you want to show the "tags" inside the posts?
-show-tags:              true
+show-tags:              false
 
 # related posts inside a post?
 related:                true
@@ -96,9 +96,9 @@ animation:              true
 
 plugins:
 #  - jekyll-seo-tag
-#  - jekyll-gist
+  - jekyll-gist
 #  - jekyll-feed
-#  - jemoji
+  - jemoji
 
 jekyll-mentions:
     base_url:           https://github.com
