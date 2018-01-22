@@ -11,17 +11,18 @@ author: saik0s
 description: Styling UI elements using swift extensions
 # jemoji: '<img class="emoji" title=":ramen:" alt=":ramen:" src="https://assets.github.com/images/icons/emoji/unicode/1f35c.png" height="20" width="20" align="absmiddle">'
 ---
+
 # Swift styling using extensions
 
-One morning I was working on the new screen for the app and did notice that I have such a lot of elements on the screens that it is really hard to manage them in the way I usually do it. I decided to separate styles from screens source files. Luckily I was using Swift language and it has a very powerful feature called "extensions".
+One morning I was working on the new screen for the app and did notice that I have such a lot of elements on the screens that it is tough to manage them in the way I usually do it. I decided to separate styles from screens source files. Luckily I was using Swift language, and it has a compelling feature called **extensions**.
 
-Lets separate our UI styles to several groups and create files for each of them. I am going to style AsyncDisplayKit(Texture) elements but this approach can be easily applied to UIKit elements. Here is the result we are going to achieve:
+Let's separate our UI styles into several groups and create files for each of them. I am going to style AsyncDisplayKit(Texture) elements, but this approach can be easily applied to UIKit elements. Here is the result we are going to achieve:
 
 ```swift
 button.stylize(as: .remove)
 ```
 
-So first of all lets create Style.swift file to provide all UI elements with stylize method. My idea is to create Stylizable protocol, extension ASDisplayNode with this protocol and extension this protocol with public function called stylize. But this function needs to have an argument. Lets create generic structure called Style which is going to store a closure with UI element modification code.
+So, first of all, let's create Style.swift file to provide all UI elements with stylize method. My idea is to develop Stylizable protocol, extension ASDisplayNode with this protocol and extension this protocol with the public function called stylize. But this function needs to have an argument. Let's create a generic structure called Style which is going to store a closure with UI element modification code.
 
 ```swift
 public struct Style<Node> {
@@ -50,7 +51,7 @@ extension Stylizable where Self: ASDisplayNode {
 }
 ```
 
-Everything is ready to create our first style for our button. Our button has ASButtonNode type. Lets create ButtonStyles.swift file and add our first style to it:
+Everything is ready to create our first style for our button. Our button has an ASButtonNode type. Let's create a ButtonStyles.swift file and add our first style to it:
 
 ```swift
 import AsyncDisplayKit
