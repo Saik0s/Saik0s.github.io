@@ -1,9 +1,9 @@
 # main text of home
 title: Igor Tarasenko
-bio: A passionate problem solver and mobile solution developer
+bio: Have been creating mobile apps for more than a decade.
 
 # twitter summary info
-description: A blog about mobile application development
+description: Swift enjoyer
 
 # if it's an external image, update below for true
 # better with square images
@@ -24,7 +24,7 @@ url: http://igortarasenko.me
 permalink: /:title/
 
 # To enable google analytics, supply your token below
-analytics-google: "UA-105616484-1"
+# analytics-google: "UA-105616484-1"
 
 # To enable piwik tracking, supply your url & site ID below
 # analytics-piwik-url:  'piwik.my-host.com'
@@ -36,10 +36,10 @@ analytics-google: "UA-105616484-1"
 #   categories:           [blog, project] # only show disqus for posts that have these categories
 
 # if you don't have any of social below, comment the line
-facebook: sa1k0s
-twitter: sa1k0s
+# facebook: sa1k0s
+# twitter: sa1k0s
 # google:               113802974157762791930
-# instagram:            myinstagram
+instagram: sa1k0s
 # pinterest:            mypinterest
 linkedin: igor-tarasenko-4647214b
 # youtube:              myyoutube
@@ -60,7 +60,7 @@ authors:
     bio: A passionate problem solver and mobile solution developer
     external-image: false
     picture: assets/images/profile.jpg
-    twitter: sa1k0s
+    # twitter: sa1k0s
 
 # do you want a larger site? change the option below
 # options: [normal, large] | default: normal
