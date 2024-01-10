@@ -1,6 +1,6 @@
 # main text of home
 title: Igor Tarasenko
-bio: Have been creating mobile apps for more than a decade.
+bio: Seasoned iOS developer harnessing LLMs and Stable Diffusion to craft state-of-the-art app experiences.
 
 # twitter summary info
 description: Swift enjoyer
@@ -37,7 +37,7 @@ permalink: /:title/
 
 # if you don't have any of social below, comment the line
 # facebook: sa1k0s
-# twitter: sa1k0s
+twitter: sa1k0s
 # google:               113802974157762791930
 instagram: sa1k0s
 # pinterest:            mypinterest
@@ -57,7 +57,7 @@ email: tarasenko.igor.v@gmail.com
 authors:
   saik0s:
     name: Igor Tarasenko
-    bio: A passionate problem solver and mobile solution developer
+    bio: Seasoned iOS developer harnessing LLMs and Stable Diffusion to craft state-of-the-art app experiences.
     external-image: false
     picture: assets/images/profile.jpg
     # twitter: sa1k0s
