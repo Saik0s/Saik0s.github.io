@@ -1,396 +1,196 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://igortarasenko.me/feed.xml" rel="self" type="application/atom+xml" /><link href="http://igortarasenko.me/" rel="alternate" type="text/html" /><updated>2024-01-10T17:56:00+01:00</updated><id>http://igortarasenko.me/feed.xml</id><title type="html">Igor Tarasenko</title><subtitle>Swift enjoyer</subtitle><entry><title type="html">iOS UI elements styling</title><link href="http://igortarasenko.me/iOS-UI-elements-styling/" rel="alternate" type="text/html" title="iOS UI elements styling" /><published>2018-01-15T22:48:00+01:00</published><updated>2018-01-15T22:48:00+01:00</updated><id>http://igortarasenko.me/iOS-UI-elements-styling</id><content type="html" xml:base="http://igortarasenko.me/iOS-UI-elements-styling/">&lt;h1 id=&quot;swift-styling-using-extensions&quot;&gt;Swift styling using extensions&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-09-21T19:46:56+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Igor Tarasenko</title><subtitle>Personal site of Igor Tarasenko - iOS Developer, AI Enthusiast, and Creator of Whisperboard</subtitle><entry><title type="html">🎙️ Whisperboard: AI-Powered Voice-to-Text App</title><link href="http://localhost:4000/whisperboard/" rel="alternate" type="text/html" title="🎙️ Whisperboard: AI-Powered Voice-to-Text App" /><published>2024-09-21T12:00:00+02:00</published><updated>2024-09-21T12:00:00+02:00</updated><id>http://localhost:4000/whisperboard</id><content type="html" xml:base="http://localhost:4000/whisperboard/"><![CDATA[<p><img src="https://tarasenko.dev/assets/images/whisperboard-icon.png" alt="Screenshot" /></p>
 
-&lt;p&gt;One morning I was working on the new screen for the app and did notice that I have such a lot of elements on the screens that it is tough to manage them in the way I usually do it. I decided to separate styles from screens source files. Luckily I was using Swift language, and it has a compelling feature called &lt;strong&gt;extensions&lt;/strong&gt;.&lt;/p&gt;
+<p>Whisperboard is an innovative AI-powered voice-to-text app that I developed to revolutionize the way people take notes. Leveraging OpenAI’s cutting-edge Whisper technology, Whisperboard offers unparalleled transcription accuracy, making it an indispensable tool for professionals, students, and anyone who values efficient note-taking. <a href="https://apps.apple.com/app/whisperboard/id6444747879">Try it now</a>.</p>
 
-&lt;p&gt;Let’s separate our UI styles into several groups and create files for each of them. I am going to style AsyncDisplayKit(Texture) elements, but this approach can be easily applied to UIKit elements. Here is the result we are going to achieve:&lt;/p&gt;
+<hr />
 
-&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;stylize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;as&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>What’s inside?</p>
 
-&lt;p&gt;So, first of all, let’s create Style.swift file to provide all UI elements with stylize method. My idea is to develop Stylizable protocol, extension ASDisplayNode with this protocol and extension this protocol with the public function called stylize. But this function needs to have an argument. Let’s create a generic structure called Style which is going to store a closure with UI element modification code.&lt;/p&gt;
+<ul>
+  <li>OpenAI’s Whisper technology for high-precision transcription</li>
+  <li>Effortless recording with automatic transcription</li>
+  <li>User-friendly interface for seamless note-taking</li>
+  <li>Offline functionality for privacy and convenience</li>
+  <li>Multi-platform support (iOS, iPadOS, macOS, visionOS)</li>
+  <li>Privacy-focused design (no identity-linked data collection)</li>
+</ul>
 
-&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Style&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;internal&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;closure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt;
+<hr />
 
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;closure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;@escaping&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;closure&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;closure&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>Key Features:</p>
 
-&lt;p&gt;Now we can pass this struct as an argument to our stylize method.&lt;/p&gt;
+<ul>
+  <li><strong>Effortless Recording</strong>: Simply tap to record, and let Whisperboard handle the transcription automatically.</li>
+  <li><strong>High Precision</strong>: Designed to handle complex vocabulary with remarkable accuracy, perfect for lectures, meetings, interviews, and personal notes.</li>
+  <li><strong>Intuitive Design</strong>: A clean, user-friendly interface that makes voice recording and transcription a breeze.</li>
+  <li><strong>Versatile Application</strong>: Ideal for a wide range of users, from police officers dictating reports to students capturing lecture notes.</li>
+  <li><strong>Cross-Platform</strong>: Available on iOS, iPadOS, macOS (M1 or later), and visionOS, ensuring your notes are accessible across all your Apple devices.</li>
+</ul>
 
-&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;protocol&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Stylizable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<hr />
 
-&lt;span class=&quot;kd&quot;&gt;extension&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ASDisplayNode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Stylizable&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>User Feedback:</p>
 
-&lt;span class=&quot;kd&quot;&gt;extension&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Stylizable&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ASDisplayNode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;@discardableResult&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;stylize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;style&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Style&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;Self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Self&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;style&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;closure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>“This app is a game-changer for my work. The transcription accuracy is impressive, and it’s so easy to use!” - John D., Police Officer</p>
 
-&lt;p&gt;Everything is ready to create our first style for our button. Our button has an ASButtonNode type. Let’s create a ButtonStyles.swift file and add our first style to it:&lt;/p&gt;
+<p>“I’ve tried many voice-to-text apps, but Whisperboard stands out. It’s fast, accurate, and works offline. Highly recommended!” - Sarah L., Journalist</p>
 
-&lt;div class=&quot;language-swift highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;AsyncDisplayKit&lt;/span&gt;
+<hr />
 
-&lt;span class=&quot;kd&quot;&gt;extension&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Style&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ASButtonNode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Style&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Style&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;setBackgroundImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-					&lt;span class=&quot;kt&quot;&gt;UIImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;named&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;delete&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-					&lt;span class=&quot;nv&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;normal&lt;/span&gt;
-			&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p><a href="https://apps.apple.com/app/whisperboard/id6444747879">Download Whisperboard</a> from the App Store and experience the future of note-taking. For support or feedback, please <a href="mailto:igor@tarasenko.dev">contact me</a>.</p>]]></content><author><name>igortarasenko</name></author><category term="project" /><category term="ios" /><summary type="html"><![CDATA[Whisperboard is an AI-powered voice-to-text app that revolutionizes note-taking with high-precision transcription.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://tarasenko.dev/assets/images/whisperboard-icon.png" /><media:content medium="image" url="https://tarasenko.dev/assets/images/whisperboard-icon.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Realtime Transcription</title><link href="http://localhost:4000/realtime-transcription/" rel="alternate" type="text/html" title="Realtime Transcription" /><published>2024-09-21T00:00:00+02:00</published><updated>2024-09-21T00:00:00+02:00</updated><id>http://localhost:4000/realtime-transcription</id><content type="html" xml:base="http://localhost:4000/realtime-transcription/"><![CDATA[<p>Certainly! I’ll rewrite the post using the template you provided, making it more real and personal based on my experience. Here’s the revised version:</p>
 
-&lt;p&gt;Using such approach autocomplete system is going to show us only button styles for buttons.&lt;/p&gt;
+<hr />
+<p>title: “Whisper on iOS: Real-Time Transcription Adventures”
+layout: post
+date: 2024-09-21 14:30
+image: false
+headerImage: false
+tag:</p>
+<ul>
+  <li>iOS</li>
+  <li>Whisper</li>
+  <li>Speech Recognition
+star: true
+category: blog
+author: igortarasenko
+description: Exploring real-time transcription with Whisper on iOS
+—</li>
+</ul>
 
-&lt;p&gt;Have fun!&lt;/p&gt;</content><author><name>saik0s</name></author><category term="blog" /><category term="swift" /><summary type="html">Swift styling using extensions</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://igortarasenko.me/assets/images/markdown.jpg" /><media:content medium="image" url="http://igortarasenko.me/assets/images/markdown.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Markdown Extra Components</title><link href="http://igortarasenko.me/markdown-extra-components/" rel="alternate" type="text/html" title="Markdown Extra Components" /><published>2016-02-24T22:48:00+01:00</published><updated>2016-02-24T22:48:00+01:00</updated><id>http://igortarasenko.me/markdown-extra-components</id><content type="html" xml:base="http://igortarasenko.me/markdown-extra-components/">&lt;h2 id=&quot;summary&quot;&gt;Summary:&lt;/h2&gt;
+<h2 id="the-real-time-transcription-dream">The Real-Time Transcription Dream</h2>
 
-&lt;p&gt;You can pick as item to see how to apply in markdown.&lt;/p&gt;
+<p>When I first heard about Whisper, I was skeptical. Another speech recognition model? But boy, was I wrong. Whisper isn’t just another model – it’s a game-changer for iOS developers like us.</p>
 
-&lt;h4 id=&quot;especial-elements&quot;&gt;Especial Elements&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;#evidence&quot;&gt;Evidence&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#side-by-side&quot;&gt;Side-by-Side&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#star&quot;&gt;Star&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#especial-breaker&quot;&gt;Especial Breaker&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#spoiler&quot;&gt;Spoiler&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+<figure class="highlight"><pre><code class="language-html" data-lang="html">Whisper: On-device, real-time speech recognition that actually works. Mind = blown.</code></pre></figure>
 
-&lt;h4 id=&quot;external-elements&quot;&gt;External Elements&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;#gist&quot;&gt;Gist&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#codepen&quot;&gt;Codepen&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#slideshare&quot;&gt;Slideshare&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#videos&quot;&gt;Videos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+<hr />
 
-&lt;hr /&gt;
+<h2 id="why-whisper-matters">Why Whisper Matters</h2>
 
-&lt;h2 id=&quot;evidence&quot;&gt;Evidence&lt;/h2&gt;
+<h3 id="privacy-first">Privacy First</h3>
+<p>No more sending audio to the cloud. Your users’ voice data stays on their device. Period.</p>
 
-&lt;p&gt;You can try the evidence!&lt;/p&gt;
+<h3 id="offline-capable">Offline Capable</h3>
+<p>Lost internet? No problem. Whisper keeps transcribing like a champ.</p>
 
-&lt;p&gt;&lt;span class=&quot;evidence&quot;&gt;Paragraphs can be written like so. A paragraph is the basic block of Markdown. A paragraph is what text will turn into when there is no reason it should become anything else.&lt;/span&gt;&lt;/p&gt;
+<h3 id="multilingual-magic">Multilingual Magic</h3>
+<p>It handles multiple languages without breaking a sweat. My Ukrainian accent? Not an issue.</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;evidence&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Paragraphs can be written like so. A paragraph is the basic block of Markdown. A paragraph is what text will turn into when there is no reason it should become anything else.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">1. Privacy: On-device processing
+2. Offline: Works without internet
+3. Multilingual: Handles accents and languages with ease</code></pre></figure>
 
-&lt;hr /&gt;
+<hr />
 
-&lt;h2 id=&quot;side-by-side&quot;&gt;Side-by-side&lt;/h2&gt;
+<h2 id="the-real-time-challenge">The Real-Time Challenge</h2>
 
-&lt;p&gt;Like the &lt;a href=&quot;https://medium.com/&quot;&gt;Medium&lt;/a&gt; component.&lt;/p&gt;
+<p>Getting Whisper to work in real-time on iOS? It’s like trying to juggle while riding a unicycle. Backwards. Uphill.</p>
 
-&lt;p&gt;&lt;strong&gt;Image&lt;/strong&gt; on the left and &lt;strong&gt;Text&lt;/strong&gt; on the right:&lt;/p&gt;
+<ul>
+  <li>Latency: Every millisecond counts</li>
+  <li>Battery life: Don’t kill the user’s phone</li>
+  <li>Accuracy: Fast is good, but not if it’s gibberish</li>
+</ul>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;side-by-side&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;toleft&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;image&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://igortarasenko.me/assets/images/profile.jpg&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;alt=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Alt Text&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;figcaption&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;caption&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Photo by John Doe&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figcaption&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">* Latency
+* Battery life
+* Accuracy</code></pre></figure>
 
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;toright&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<hr />
 
-&lt;div class=&quot;side-by-side&quot;&gt;
-    &lt;div class=&quot;toleft&quot;&gt;
-        &lt;img class=&quot;image&quot; src=&quot;http://igortarasenko.me/assets/images/profile.jpg&quot; alt=&quot;Alt Text&quot; /&gt;
-        &lt;figcaption class=&quot;caption&quot;&gt;Photo by John Doe&lt;/figcaption&gt;
-    &lt;/div&gt;
+<h2 id="taming-the-audio-beast">Taming the Audio Beast</h2>
 
-    &lt;div class=&quot;toright&quot;&gt;
-        &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<h3 id="chunking-strategy">Chunking Strategy</h3>
 
-&lt;p&gt;&lt;strong&gt;Text&lt;/strong&gt; on the left and &lt;strong&gt;Image&lt;/strong&gt; on the right:&lt;/p&gt;
+<p>I learned this the hard way: you can’t just feed Whisper a continuous stream of audio. You need to chunk it.</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;side-by-side&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;toleft&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">processAudioChunk</span><span class="p">(</span><span class="n">_</span> <span class="nv">chunk</span><span class="p">:</span> <span class="p">[</span><span class="kt">Float</span><span class="p">])</span> <span class="p">{</span>
+    <span class="c1">// Process in ~30 second chunks</span>
+    <span class="k">if</span> <span class="n">chunk</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">sampleRate</span> <span class="p">{</span>
+        <span class="nf">transcribeChunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;toright&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;image&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://igortarasenko.me/assets/images/profile.jpg&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;alt=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Alt Text&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;figcaption&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;caption&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Photo by John Doe&lt;span class=&quot;nt&quot;&gt;&amp;lt;/figcaption&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<h3 id="voice-activity-detection-vad">Voice Activity Detection (VAD)</h3>
 
-&lt;div class=&quot;side-by-side&quot;&gt;
-    &lt;div class=&quot;toleft&quot;&gt;
-        &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
-    &lt;/div&gt;
+<p>Save your CPU (and your user’s battery) by only transcribing when someone’s actually talking.</p>
 
-    &lt;div class=&quot;toright&quot;&gt;
-        &lt;img class=&quot;image&quot; src=&quot;http://igortarasenko.me/assets/images/profile.jpg&quot; alt=&quot;Alt Text&quot; /&gt;
-        &lt;figcaption class=&quot;caption&quot;&gt;Photo by John Doe&lt;/figcaption&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">isVoiceDetected</span><span class="p">(</span><span class="k">in</span> <span class="nv">samples</span><span class="p">:</span> <span class="p">[</span><span class="kt">Float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">energy</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">*</span> <span class="nv">$0</span> <span class="p">}</span><span class="o">.</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">+</span><span class="p">)</span> <span class="o">/</span> <span class="kt">Float</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">energy</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+<span class="p">}</span></code></pre></figure>
 
-&lt;hr /&gt;
+<hr />
 
-&lt;h2 id=&quot;star&quot;&gt;Star&lt;/h2&gt;
+<h2 id="ui-magic-making-it-feel-real-time">UI Magic: Making It Feel Real-Time</h2>
 
-&lt;p&gt;You can give evidence to a post. Just add the tag to the markdown file.&lt;/p&gt;
+<p>The secret sauce? Don’t wait for perfect transcriptions. Show partial results.</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;star: true&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<blockquote>
+  <p>Users don’t need perfection. They need responsiveness. Show them something, then refine it.</p>
+</blockquote>
 
-&lt;hr /&gt;
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">updateTranscription</span><span class="p">(</span><span class="n">_</span> <span class="nv">partial</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="k">async</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">transcriptionLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">partial</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-&lt;h2 id=&quot;especial-breaker&quot;&gt;Especial Breaker&lt;/h2&gt;
+<hr />
 
-&lt;p&gt;You can add a especial &lt;em&gt;hr&lt;/em&gt; to your text.&lt;/p&gt;
+<h2 id="balancing-act-speed-vs-accuracy">Balancing Act: Speed vs Accuracy</h2>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;breaker&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<p>Whisper comes in different model sizes. Bigger isn’t always better.</p>
 
-&lt;div class=&quot;breaker&quot;&gt;&lt;/div&gt;
+<ul>
+  <li>Tiny: Blazing fast, but sometimes hilariously wrong</li>
+  <li>Base: My go-to for most use cases</li>
+  <li>Small: When you need that extra accuracy kick</li>
+</ul>
 
-&lt;hr /&gt;
+<figure class="highlight"><pre><code class="language-raw" data-lang="raw">* Tiny: Speed demon
+* Base: Jack of all trades
+* Small: Accuracy king</code></pre></figure>
 
-&lt;h2 id=&quot;spoiler&quot;&gt;Spoiler&lt;/h2&gt;
+<hr />
 
-&lt;p&gt;You can add an especial hidden content that appears on hover.&lt;/p&gt;
+<h2 id="code-snippet-the-heart-of-real-time-whisper">Code Snippet: The Heart of Real-Time Whisper</h2>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;spoiler&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;p&amp;gt;&lt;/span&gt;your content&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<p>Here’s a simplified version of how I’m handling real-time transcription in WhisperBoard:</p>
 
-&lt;div class=&quot;spoiler&quot;&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;&lt;/div&gt;
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">class</span> <span class="kt">RealtimeTranscriber</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">audioBuffer</span><span class="p">:</span> <span class="p">[</span><span class="kt">Float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="kd">private</span> <span class="k">let</span> <span class="nv">whisper</span><span class="p">:</span> <span class="kt">WhisperKit</span>
 
-&lt;hr /&gt;
+    <span class="kd">func</span> <span class="nf">processAudioChunk</span><span class="p">(</span><span class="n">_</span> <span class="nv">newSamples</span><span class="p">:</span> <span class="p">[</span><span class="kt">Float</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">audioBuffer</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">newSamples</span><span class="p">)</span>
 
-&lt;h2 id=&quot;gist&quot;&gt;Gist&lt;/h2&gt;
+        <span class="k">if</span> <span class="n">audioBuffer</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">30</span> <span class="o">*</span> <span class="kt">WhisperKit</span><span class="o">.</span><span class="n">sampleRate</span> <span class="p">{</span>
+            <span class="kt">Task</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="k">try</span> <span class="k">await</span> <span class="n">whisper</span><span class="o">.</span><span class="nf">transcribe</span><span class="p">(</span><span class="nv">audioArray</span><span class="p">:</span> <span class="n">audioBuffer</span><span class="p">)</span>
+                <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="k">async</span> <span class="p">{</span>
+                    <span class="k">self</span><span class="o">.</span><span class="nf">updateUI</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">result</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="n">audioBuffer</span><span class="o">.</span><span class="nf">removeFirst</span><span class="p">(</span><span class="mi">15</span> <span class="o">*</span> <span class="kt">WhisperKit</span><span class="o">.</span><span class="n">sampleRate</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-&lt;p&gt;You can add Gists from github.&lt;/p&gt;
+<hr />
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;{ % gist sergiokopplin/91ff4220480727b47224245ee2e9c291 % }&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<h2 id="wrapping-up">Wrapping Up</h2>
 
-&lt;script src=&quot;https://gist.github.com/sergiokopplin/91ff4220480727b47224245ee2e9c291.js&quot;&gt; &lt;/script&gt;
+<p>Implementing real-time Whisper on iOS is challenging, but the results are worth it. It’s opened up possibilities I never thought possible on mobile devices.</p>
 
-&lt;hr /&gt;
+<p>Remember:</p>
+<ol>
+  <li>Chunk your audio</li>
+  <li>Use VAD to save resources</li>
+  <li>Show partial results for responsiveness</li>
+  <li>Experiment with model sizes</li>
+</ol>
 
-&lt;h2 id=&quot;codepen&quot;&gt;Codepen&lt;/h2&gt;
+<p>Got questions? Struggling with your own Whisper implementation? Hit me up on <a href="https://twitter.com/sa1k0s">Twitter</a>. Let’s push the boundaries of what’s possible on iOS together.</p>
 
-&lt;p&gt;You can add Pens from Codepen.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;268&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-theme-id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-slug-hash=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;gfdDu&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-default-tab=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;result&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-user=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;chriscoyier&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;codepen&apos;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    See the Pen &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;https://codepen.io/chriscoyier/pen/gfdDu/&apos;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Crappy Recreation of the Book Cover of *The Flame Alphabet*&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt; by Chris Coyier (&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;https://codepen.io/chriscoyier&apos;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;@chriscoyier&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;) on &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;https://codepen.io&apos;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;CodePen&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;.
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;//assets.codepen.io/assets/embed/ei.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p data-height=&quot;268&quot; data-theme-id=&quot;0&quot; data-slug-hash=&quot;gfdDu&quot; data-default-tab=&quot;result&quot; data-user=&quot;chriscoyier&quot; class=&quot;codepen&quot;&gt;See the Pen &lt;a href=&quot;https://codepen.io/chriscoyier/pen/gfdDu/&quot;&gt;Crappy Recreation of the Book Cover of *The Flame Alphabet*&lt;/a&gt; by Chris Coyier (&lt;a href=&quot;https://codepen.io/chriscoyier&quot;&gt;@chriscoyier&lt;/a&gt;) on &lt;a href=&quot;https://codepen.io&quot;&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-&lt;script async=&quot;&quot; src=&quot;//assets.codepen.io/assets/embed/ei.js&quot;&gt;&lt;/script&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;slideshare&quot;&gt;Slideshare&lt;/h2&gt;
-
-&lt;p&gt;Add your presentations here!&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;iframe&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;//www.slideshare.net/slideshow/embed_code/key/hqDhSJoWkrHe7l&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;560&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;310&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;frameborder=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;marginwidth=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;marginheight=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scrolling=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;no&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;allowfullscreen&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;/iframe&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;iframe src=&quot;//www.slideshare.net/slideshow/embed_code/key/hqDhSJoWkrHe7l&quot; width=&quot;560&quot; height=&quot;310&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&quot; allowfullscreen=&quot;&quot;&gt; &lt;/iframe&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;videos&quot;&gt;Videos&lt;/h2&gt;
-
-&lt;p&gt;Do you want some videos? Youtube, Vimeo or Vevo? Copy the embed code and paste on your post!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example&lt;/strong&gt;&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;iframe&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;560&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;310&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.youtube.com/embed/r7XhWUDj-Ts&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;frameborder=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;allowfullscreen&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;iframe width=&quot;560&quot; height=&quot;310&quot; src=&quot;https://www.youtube.com/embed/r7XhWUDj-Ts&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;</content><author><name>jamesfoster</name></author><category term="blog" /><category term="markdown" /><category term="components" /><category term="extra" /><summary type="html">Summary:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://igortarasenko.me/assets/images/markdown.jpg" /><media:content medium="image" url="http://igortarasenko.me/assets/images/markdown.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Markdown Common Elements</title><link href="http://igortarasenko.me/markdown-common-elements/" rel="alternate" type="text/html" title="Markdown Common Elements" /><published>2016-02-24T22:44:00+01:00</published><updated>2016-02-24T22:44:00+01:00</updated><id>http://igortarasenko.me/markdown-common-elements</id><content type="html" xml:base="http://igortarasenko.me/markdown-common-elements/">&lt;h2 id=&quot;basic-formatting&quot;&gt;Basic formatting&lt;/h2&gt;
-
-&lt;p&gt;This note &lt;strong&gt;demonstrates&lt;/strong&gt; some of what &lt;a href=&quot;https://daringfireball.net/projects/markdown/&quot;&gt;Markdown&lt;/a&gt; is &lt;em&gt;capable of doing&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;And that’s how to do it.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;This note **demonstrates** some of what [Markdown][some/link] is *capable of doing*.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;headings&quot;&gt;Headings&lt;/h2&gt;
-
-&lt;p&gt;There are six levels of headings. They correspond with the six levels of HTML headings. You’ve probably noticed them already in the page. Each level down uses one more hash character. But we are using just 4 of them.&lt;/p&gt;
-
-&lt;h1 id=&quot;headings-can-be-small&quot;&gt;Headings can be small&lt;/h1&gt;
-
-&lt;h2 id=&quot;headings-can-be-small-1&quot;&gt;Headings can be small&lt;/h2&gt;
-
-&lt;h3 id=&quot;headings-can-be-small-2&quot;&gt;Headings can be small&lt;/h3&gt;
-
-&lt;h4 id=&quot;headings-can-be-small-3&quot;&gt;Headings can be small&lt;/h4&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;# Heading
-## Heading
-### Heading
-#### Heading&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;lists&quot;&gt;Lists&lt;/h2&gt;
-
-&lt;h3 id=&quot;ordered-list&quot;&gt;Ordered list&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Item 1&lt;/li&gt;
-  &lt;li&gt;A second item&lt;/li&gt;
-  &lt;li&gt;Number 3&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;1. Item 1
-2. A second item
-3. Number 3&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;unordered-list&quot;&gt;Unordered list&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;An item&lt;/li&gt;
-  &lt;li&gt;Another item&lt;/li&gt;
-  &lt;li&gt;Yet another item&lt;/li&gt;
-  &lt;li&gt;And there’s more…&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;* An item
-* Another item
-* Yet another item
-* And there&apos;s more...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;paragraph-modifiers&quot;&gt;Paragraph modifiers&lt;/h2&gt;
-
-&lt;h3 id=&quot;quote&quot;&gt;Quote&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Here is a quote. What this is should be self explanatory. Quotes are automatically indented when they are used.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;&amp;gt; Here is a quote. What this is should be self explanatory.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;urls&quot;&gt;URLs&lt;/h2&gt;
-
-&lt;p&gt;URLs can be made in a handful of ways:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;A named link to &lt;a href=&quot;https://daringfireball.net/projects/markdown/basics&quot;&gt;Mark It Down&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;Another named link to &lt;a href=&quot;https://google.com/&quot;&gt;Mark It Down&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Sometimes you just want a URL like &lt;a href=&quot;https://google.com/&quot;&gt;https://google.com/&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;* A named link to [MarkItDown][3].
-* Another named link to [MarkItDown](https://google.com/)
-* Sometimes you just want a URL like &amp;lt;https://google.com/&amp;gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;horizontal-rule&quot;&gt;Horizontal rule&lt;/h2&gt;
-
-&lt;p&gt;A horizontal rule is a line that goes across the middle of the page.
-It’s sometimes handy for breaking things up.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;---&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;images&quot;&gt;Images&lt;/h2&gt;
-
-&lt;p&gt;Markdown can also contain images. I’ll need to add something here sometime.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;![Markdowm Image][/image/url]&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://kune.fr/wp-content/uploads/2013/10/ghost-blog.jpg&quot; alt=&quot;Markdowm Image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Figure Caption&lt;/em&gt;?&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;![Markdowm Image][/image/url]
-&amp;lt;figcaption class=&quot;caption&quot;&amp;gt;Photo by John Doe&amp;lt;/figcaption&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://kune.fr/wp-content/uploads/2013/10/ghost-blog.jpg&quot; alt=&quot;Markdowm Image&quot; /&gt;&lt;/p&gt;
-&lt;figcaption class=&quot;caption&quot;&gt;Photo by John Doe&lt;/figcaption&gt;
-
-&lt;p&gt;&lt;em&gt;Bigger Images&lt;/em&gt;?&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-raw&quot; data-lang=&quot;raw&quot;&gt;![Markdowm Image][/image/url]{: class=&quot;bigger-image&quot; }&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://kune.fr/wp-content/uploads/2013/10/ghost-blog.jpg&quot; alt=&quot;Markdowm Image&quot; class=&quot;bigger-image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
-
-&lt;p&gt;A HTML Example:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Document&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Just a test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;A CSS Example:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;font-size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;.8em&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;white-space&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;100%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tt&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Monaco&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Consolas&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Inconsolata&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;monospace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sans-serif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rgba&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;.05&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;A JS Example:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Sticky Header&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scrollTop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;900&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hasClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;show-menu&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;#hamburguer__open&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeOut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fast&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hasClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;show-menu&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;#hamburguer__open&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fadeIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fast&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name>johndoe</name></author><category term="blog" /><category term="markdown" /><category term="elements" /><summary type="html">Basic formatting</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://igortarasenko.me/assets/images/markdown.jpg" /><media:content medium="image" url="http://igortarasenko.me/assets/images/markdown.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">:ramen: Indigo, minimalist jekyll theme</title><link href="http://igortarasenko.me/indigo-jekyll-theme/" rel="alternate" type="text/html" title=":ramen: Indigo, minimalist jekyll theme" /><published>2016-01-23T22:10:00+01:00</published><updated>2016-01-23T22:10:00+01:00</updated><id>http://igortarasenko.me/indigo-jekyll-theme</id><content type="html" xml:base="http://igortarasenko.me/indigo-jekyll-theme/">&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/sergiokopplin/indigo/gh-pages/assets/screen-shot.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Example of project - Indigo Minimalist Jekyll Template - &lt;a href=&quot;https://sergiokopplin.github.io/indigo/&quot;&gt;Demo&lt;/a&gt;. This is a simple and minimalist template for Jekyll for those who likes to eat noodles.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;What has inside?&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Gulp&lt;/li&gt;
-  &lt;li&gt;BrowserSync&lt;/li&gt;
-  &lt;li&gt;Stylus&lt;/li&gt;
-  &lt;li&gt;SVG&lt;/li&gt;
-  &lt;li&gt;No JS&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fsergiokopplin.github.io%2Findigo%2F&quot;&gt;98/100&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://sergiokopplin.github.io/indigo/&quot;&gt;Check it out&lt;/a&gt; here.
-If you need some help, just &lt;a href=&quot;https://github.com/sergiokopplin/indigo/issues&quot;&gt;tell me&lt;/a&gt;.&lt;/p&gt;</content><author><name>johndoe</name></author><category term="project" /><category term="jekyll" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://sergiokopplin.github.io/indigo/assets/images/jekyll-logo-light-solid.png" /><media:content medium="image" url="https://sergiokopplin.github.io/indigo/assets/images/jekyll-logo-light-solid.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+<p>Now go build something amazing. Your users’ voices are waiting to be heard – literally.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Certainly! I’ll rewrite the post using the template you provided, making it more real and personal based on my experience. Here’s the revised version:]]></summary></entry></feed>

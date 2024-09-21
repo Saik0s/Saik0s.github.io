@@ -27,43 +27,41 @@
 ## What has inside
 
 - [Jekyll](https://jekyllrb.com/), [Sass](https://sass-lang.com/) ~[RSCSS](https://rscss.io/)~ and [SVG](https://www.w3.org/Graphics/SVG/);
-- Google Speed: [98/100](https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fsergiokopplin.github.io%2Findigo%2F);
-- No JS. :sunglasses:
+- Page Speed: [99~Desktop](https://pagespeed.web.dev/analysis/https-sergiokopplin-github-io-indigo/41axptm3as?utm_source=psi&utm_medium=redirect&form_factor=desktop);
 
 ## Setup
 
 0. :star: to the project. :metal:
 1. Fork the project [Indigo](https://github.com/sergiokopplin/indigo/fork)
-2. Edit `_config.yml` with your data (check <a href="README.md#settings">settings</a> section)
+2. Edit `_config.yml` with your data
 3. Write some posts :bowtie:
 
-If you want to test locally on your machine, do the following steps also:
+To run locally do the following:
 
 1. Install [Jekyll](https://jekyllrb.com) and [Bundler](https://bundler.io/).
 2. Clone the forked repo on your machine
-3. Enter the cloned folder via terminal and run `bundle install`
-4. Then run `bundle exec jekyll serve`
-5. Open it in your browser: `http://localhost:4000`
-6. Do you want an admin panel to edit your posts? You can install this plugin [jekyll-admin](https://jekyll.github.io/jekyll-admin/).
+3. Enter the cloned folder via terminal and run:
+```sh
+bundle install
+bundle exec jekyll serve
+```
+4. Open it in your browser: [http://localhost:4000](http://localhost:4000)
+
+Or run with [docker](https://github.com/BretFisher/jekyll-serve).
 
 ## Settings
 
-You must fill some informations on `_config.yml` to customize your site.
-
-```
-name: John Doe
-bio: 'A Man who travels the world eating noodles'
-picture: 'assets/images/profile.jpg'
-...
-
-and lot of other options, like width, projects, pages, read-time, tags, related posts, animations, multiple-authors, etc.
-```
+You can customize your site on `_config.yml` file.
 
 ## How To?
 
-Check the [FAQ](./FAQ.md) if you have any doubt or problem.
+Check the [FAQ](./FAQ.md).
 
 ---
 ## License
 
 [MIT](https://kopplin.mit-license.org/) License © Sérgio Kopplin
+
+---
+
+[![Star History Chart](https://api.star-history.com/svg?repos=sergiokopplin/indigo&type=Date)](https://star-history.com/#sergiokopplin/indigo&Date)
